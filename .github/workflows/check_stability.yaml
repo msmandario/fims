@@ -32,3 +32,10 @@ jobs:
         run: pnpm exec playwright install --with-deps
       - name: Test Codebase
         run: pnpm test
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v6
+        if: ${{ !cancelled() }}
+        with:
+          name: report
+          path: test-results/
+          retention-days: 90
