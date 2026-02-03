@@ -40,3 +40,4 @@ jobs:
           name: report
           path: test-results/
           retention-days: 90
+          include-hidden-files: true
