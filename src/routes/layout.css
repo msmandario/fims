@@ -1,3 +1,12 @@
 @import url('$lib/fonts/Poppins/font.css') layer(base);
 
 @import 'tailwindcss';
+
+@theme inline {
+  --font-poppins: poppins, sans-serif;
+  --color-fims-green: rgb(2 70 28);
+  --color-fims-red: rgb(118 21 25);
+  --color-fims-beige: rgb(237 231 206);
+  --color-fims-white: rgb(249 249 249);
+  --color-fims-gray: rgb(182 182 182);
+}
