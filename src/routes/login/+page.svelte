@@ -35,6 +35,7 @@
     <form
       class="flex flex-col my-8"
       method="POST"
+      action="?/signInEmail"
       bind:this={formElement}
       use:enhance={() => {
         isSigningIn = true;

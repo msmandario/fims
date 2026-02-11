@@ -2,6 +2,8 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { auth } from '$lib/server/auth';
 
+const validProviders = ['google'];
+
 export async function load({ locals }) {
     if (locals.user) {
         // then there's a logged in user
@@ -12,7 +14,7 @@ export async function load({ locals }) {
 };
 
 export const actions = {
-    default: async ({ request }) => {
+    signInEmail: async ({ request }) => {
         const data = await request.formData();
         const email = data.get('email') as string;
         const password = data.get('password') as string;
@@ -47,4 +49,29 @@ export const actions = {
             throw redirect(303, '/');
         }
     },
+
+    signInSocial: async ({ request }) => {
+        const formData = await request.formData();
+        const provider = formData.get('provider') as string;
+        const callbackURL = '/';
+
+        // Validate input
+        if (!provider || !validProviders.includes(provider)) {
+            return fail(400, { error: 'Invalid auth provider.' })
+        }
+
+        // Trigger auth
+        const response = await auth.api.signInSocial({
+            body: {
+                provider: provider as string,
+                callbackURL
+            },
+        });
+
+        if (response.url) {
+            throw redirect(303, response.url);
+        }
+
+        return fail(500, { error: 'Third-party auth failed' });
+    }
 } satisfies Actions;
