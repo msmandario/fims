@@ -2,6 +2,10 @@ import { pgTable, serial, varchar, date, smallint, text, foreignKey, integer, un
 
 
 
+import { user } from "./auth.schema";
+
+
+
 export const faculty = pgTable("faculty", {
 	facultyid: serial().primaryKey().notNull(),
 	lastname: varchar({ length: 100 }).notNull(),
@@ -233,30 +237,34 @@ export const role = pgTable("role", {
 	canviewchangelogs: boolean().notNull(),
 });
 
-export const account = pgTable("account", {
-	accountid: serial().primaryKey().notNull(),
-	email: varchar({ length: 255 }).notNull(),
-	passwordhash: varchar({ length: 255 }).notNull(),
-	accountrole: varchar({ length: 50 }).notNull(),
+export const userrole = pgTable("userrole", {
+	userroleid: serial().primaryKey().notNull(),
+	userid: text(),
+	role: varchar({ length: 50 }).notNull(),
 }, (table) => [
 	foreignKey({
-			columns: [table.accountrole],
-			foreignColumns: [accountrole.accountrole],
-			name: "account_accountrole_fkey"
-		}),
-	unique("account_email_key").on(table.email),
-]);
+		columns: [table.userid],
+		foreignColumns: [user.id],
+		name: "userrole_userid_fkey"
+	}),
+	foreignKey({
+		columns: [table.role],
+		foreignColumns: [role.role],
+		name: "userrole_role_fkey"
+	}),
+]
+);
 
 export const changelog = pgTable("changelog", {
 	logid: serial().primaryKey().notNull(),
 	timestamp: timestamp({ mode: 'string' }).notNull(),
-	accountid: integer(),
+	accountid: text(),
 	tupleid: integer(),
 	operation: smallint().notNull(),
 }, (table) => [
 	foreignKey({
 			columns: [table.accountid],
-			foreignColumns: [account.accountid],
+			foreignColumns: [user.id],
 			name: "changelog_accountid_fkey"
 		}),
 ]);
