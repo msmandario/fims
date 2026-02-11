@@ -1,6 +1,7 @@
 import type { Actions } from "@sveltejs/kit";
 import { fail } from "@sveltejs/kit";
 import { auth } from "$lib/server/auth";
+import { assignRole } from "$lib/server/db-helpers";
 
 export const actions = {
   default: async ({ request }) => {
@@ -41,6 +42,9 @@ export const actions = {
     if (!responseUser) {
       return fail(500, { error: 'Failed to make new account.' });
     }
+
+    // Assign role
+    await assignRole(responseUser.id, role);
 
     return {
       success: true,
