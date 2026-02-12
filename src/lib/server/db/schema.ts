@@ -383,7 +383,7 @@ export const changelog = pgTable(
         timestamp: timestamp({ mode: 'string' }).notNull(),
         userid: text(),
         tupleid: integer(),
-        operation: smallint().notNull(),
+        operation: text().notNull(),
     },
     (table) => [
         foreignKey({
