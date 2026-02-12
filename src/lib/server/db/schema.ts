@@ -362,7 +362,7 @@ export const userinfo = pgTable(
             columns: [table.userid],
             foreignColumns: [appuser.id],
             name: 'userrole_userid_fkey',
-        }),
+        }).onDelete('cascade'),
         foreignKey({
             columns: [table.role],
             foreignColumns: [role.role],
@@ -390,7 +390,7 @@ export const changelog = pgTable(
             columns: [table.userid],
             foreignColumns: [appuser.id],
             name: 'changelog_accountid_fkey',
-        }),
+        }).onDelete('set null'),
     ],
 );
 
