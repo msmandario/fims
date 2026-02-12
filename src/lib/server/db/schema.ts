@@ -73,9 +73,9 @@ export const fieldofinterest = pgTable(
     'fieldofinterest',
     {
         fieldofinterestid: serial().primaryKey().notNull(),
-        fieldname: varchar({ length: 100 }).notNull(),
+        field: varchar({ length: 100 }).notNull(),
     },
-    (table) => [unique('fieldofinterest_fieldname_key').on(table.fieldname)],
+    (table) => [unique('fieldofinterest_field_key').on(table.field)],
 );
 
 export const facultyfieldofinterest = pgTable(
