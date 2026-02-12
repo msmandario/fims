@@ -2,7 +2,7 @@ import { eq, desc } from 'drizzle-orm';
 
 import { db } from './db';
 
-import { role, userrole, faculty, facultyadminposition, adminposition, semester, rank, facultysemester, facultyrank, user } from './db/schema';
+import { role, userrole, faculty, facultyadminposition, adminposition, semester, rank, facultysemester, facultyrank, appuser } from './db/schema';
 
 export async function assignRole(id: string, role: string) {
     await db.insert(userrole).values({

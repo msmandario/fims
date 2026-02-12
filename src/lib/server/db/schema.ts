@@ -14,7 +14,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
-import { user } from './auth.schema';
+import { appuser } from './auth.schema';
 export * from './auth.schema';
 
 export const faculty = pgTable(
@@ -359,7 +359,7 @@ export const userrole = pgTable(
     (table) => [
         foreignKey({
             columns: [table.userid],
-            foreignColumns: [user.id],
+            foreignColumns: [appuser.id],
             name: 'userrole_userid_fkey',
         }),
         foreignKey({
@@ -403,7 +403,7 @@ export const changelog = pgTable(
     (table) => [
         foreignKey({
             columns: [table.accountid],
-            foreignColumns: [user.id],
+            foreignColumns: [appuser.id],
             name: 'changelog_accountid_fkey',
         }),
     ],
@@ -618,9 +618,9 @@ export const changelogRelations = relations(changelog, ({ one }) => ({
         fields: [changelog.logid],
         references: [faculty.latestchangelogid],
     }),
-    user: one(user, {
+    user: one(appuser, {
         fields: [changelog.accountid],
-        references: [user.id],
+        references: [appuser.id],
     }),
     userchangelog: one(userchangelog, {
         fields: [changelog.logid],

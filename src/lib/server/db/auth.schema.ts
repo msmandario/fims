@@ -1,9 +1,7 @@
 import { boolean, index, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
-import { changelog, userrole } from './schema';
-
-export const user = pgTable('user', {
+export const appuser = pgTable('appuser', {
     id: text('id').primaryKey(),
     name: text('name').notNull(),
     email: text('email').notNull().unique(),
@@ -34,7 +32,7 @@ export const session = pgTable(
         userAgent: text('user_agent'),
         userId: text('user_id')
             .notNull()
-            .references(() => user.id, { onDelete: 'cascade' }),
+            .references(() => appuser.id, { onDelete: 'cascade' }),
         impersonatedBy: text('impersonated_by'),
     },
     (table) => [index('session_userId_idx').on(table.userId)],
@@ -48,7 +46,7 @@ export const account = pgTable(
         providerId: text('provider_id').notNull(),
         userId: text('user_id')
             .notNull()
-            .references(() => user.id, { onDelete: 'cascade' }),
+            .references(() => appuser.id, { onDelete: 'cascade' }),
         accessToken: text('access_token'),
         refreshToken: text('refresh_token'),
         idToken: text('id_token'),
@@ -80,7 +78,7 @@ export const verification = pgTable(
     (table) => [index('verification_identifier_idx').on(table.identifier)],
 );
 
-export const userRelations = relations(user, ({ many, one }) => ({
+export const appuserRelations = relations(appuser, ({ many, one }) => ({
     sessions: many(session),
     accounts: many(account),
     userrole: one(userrole, {
@@ -94,15 +92,15 @@ export const userRelations = relations(user, ({ many, one }) => ({
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
-    user: one(user, {
+    appuser: one(appuser, {
         fields: [session.userId],
-        references: [user.id],
+        references: [appuser.id],
     }),
 }));
 
 export const accountRelations = relations(account, ({ one }) => ({
-    user: one(user, {
+    appuser: one(appuser, {
         fields: [account.userId],
-        references: [user.id],
+        references: [appuser.id],
     }),
 }));
