@@ -4,11 +4,43 @@ import { db } from './db';
 
 import { role, userinfo, faculty, facultyadminposition, adminposition, semester, rank, facultysemester, facultyrank, appuser, changelog } from './db/schema';
 
-export async function assignRole(id: string, role: string) {
-    await db.insert(userrole).values({
-        userid: id,
-        role,
-    });
+export async function logChange(makerid: string, tupleid: number, operation: string) {
+    const logids = await db
+        .insert(changelog)
+        .values({
+            timestamp: (new Date()).toISOString(),
+            userid: makerid,
+            tupleid,
+            operation
+        })
+        .returning({ id: changelog.logid });
+
+    const { id: logid } = logids[0];
+    
+    return logid;
+}
+
+export async function makeUser(makerid: string, id: string, role: string) {
+    // Actual action
+    const returnedIds = await db
+        .insert(userinfo)
+        .values({
+            userid: id,
+            role,
+        })
+        .returning({ id: userinfo.userinfoid }); 
+
+    // Log!
+    const { id: tupleid } = returnedIds[0];
+
+    const logid = await logChange(makerid, tupleid, 'Made account.');
+
+    await db
+        .update(userinfo)
+        .set({
+            latestchangelogid: logid,
+        })
+        .where(eq(userinfo.userinfoid, tupleid));
 
     return { success: true };
 }

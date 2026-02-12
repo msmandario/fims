@@ -10,7 +10,7 @@ export async function load({ locals }) {
         throw error(404, { message: 'Insufficient permissions.' });
     }
 
-    // const accountList = await getAccountList();
+    // const accountList = await getAccountList(locals.user.id);
     const accountList = [
         {
             userid: 'sdjvghkadsfhvb',
@@ -23,7 +23,7 @@ export async function load({ locals }) {
 }
 
 export const actions = {
-    async default({ request }) {
+    async default({ locals, request }) {
         const data = await request.formData();
         const email = data.get('email') as string;
         const password = data.get('password') as string;
@@ -49,8 +49,8 @@ export const actions = {
 
             if (response.user.id === '') return fail(500, { error: 'Failed to make new account.' });
 
-            // Assign role
-            await assignRole(response.user.id, role);
+            // Add user info
+            await makeUser(locals.user.id, response.user.id, role);
         } catch (error) {
             return fail(500, {
                 error: error instanceof APIError ? error.message : 'Failed to make new account.',
