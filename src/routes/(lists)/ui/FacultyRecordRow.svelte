@@ -36,7 +36,7 @@
         </div>
         <a
             href="/faculty/{id}"
-            class="flex justify-center [&>div]:flex [&>div]:h-12 [&>div]:items-center [&>div]:border-b [&>div]:border-fims-gray [&>div]:bg-white [&>div]:px-6"
+            class="contents [&>div]:flex [&>div]:h-12 [&>div]:items-center [&>div]:border-b [&>div]:border-fims-gray [&>div]:bg-white [&>div]:px-6 hover:[&>div]:bg-[#e9e9e9] cursor-pointer"
         >
             <div class={canViewChangelogs ? 'w-66 2xl:w-132' : 'w-116 2xl:w-182'}>
                 <span class="truncate">{lastName}, {firstName}</span>

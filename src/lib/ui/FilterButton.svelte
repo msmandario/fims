@@ -66,6 +66,7 @@
                     class="flex w-full rounded-sm p-3 hover:bg-[#e9e9e9]"
                     onclick={async () => {
                         selectedOpts = selectedOpts.filter((elem) => elem !== opt);
+                        isFilterOpen = false;
                         await filterOpts();
                     }}
                 >
@@ -78,6 +79,7 @@
                     class="flex w-full rounded-sm p-3 hover:bg-[#e9e9e9]"
                     onclick={async () => {
                         selectedOpts.push(opt);
+                        isFilterOpen = false;
                         await filterOpts();
                     }}
                 >
